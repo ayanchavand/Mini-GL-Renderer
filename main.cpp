@@ -64,49 +64,53 @@ int main() {
 	glViewport(0, 0, 800, 600);
 
 
-	// Shader attaching and creation
+	// Vertex Shader attaching and creation
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
 
+	// Fragment shader attaching and creation
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
 
+	// Shader Program creation and linking
 	GLuint shaderProgram = glCreateProgram();
-
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
-
 	glLinkProgram(shaderProgram);
 
+	// Delete shaders as they're linked into our program now and no longer necessary
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-
+	//Step 1: Generate IDs
 	GLuint VAO, VBO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
-	// Bind VAO first
+	
+	//Step 2: Bind the VAO (start recording config)
 	glBindVertexArray(VAO);
 
-	// Bind and fill VBO
+	//Step 3: Bind the VBO and upload data
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	//Step 4: Bind the EBO and upload indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-
-	// Set vertex attributes (recorded in VAO)
+	// Step 5: Tell OpenGL how to read the VBO
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	// Unbind (optional, but good practice)
+	//Step 6: Unbind (optional, but good practice)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // Note: Do NOT unbind the EBO while a VAO is active as the VAO stores that binding
+	
+	
 	// Set the viewport
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
