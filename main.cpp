@@ -29,6 +29,9 @@ GLuint indices[] = {
 	4, 5, 2    // bottom-right small triangle
 };
 
+bool wireframeMode = true; // default is wireframe, can start false if you like
+
+
 int main() {
 
 	// Initialize GLFWc
@@ -82,13 +85,18 @@ int main() {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
+		if (wireframeMode)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		shaderProgram.Activate();
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
-		ImGui::Begin("Hello, world!");
-		ImGui::Text("This is some useful text.");
+		ImGui::Begin("Render Settings");
+		//ImGui::Text("This is some useful text.");
+		ImGui::Checkbox("Wireframe Mode", &wireframeMode);
 		ImGui::End();
 
 		ImGui::Render();
