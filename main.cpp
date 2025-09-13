@@ -31,7 +31,7 @@ GLuint indices[] = {
 };
 
 bool wireframeMode = true; // default is wireframe, can start false if you like
-
+float scale = 0.5f;
 
 int main() {
 
@@ -71,7 +71,7 @@ int main() {
 	VBO1.Unbind();
 	EBO1.Unbind();
 
-	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+	GLuint scaleID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 	//Required Initialization for IMGUI BS
 	IMGUI_CHECKVERSION();
@@ -96,7 +96,7 @@ int main() {
 
 		shaderProgram.Activate();
 
-		glUniform1f(uniID, 0.5f);
+		glUniform1f(scaleID, scale);
 
 
 		VAO1.Bind();
@@ -105,6 +105,7 @@ int main() {
 		ImGui::Begin("Render Settings");
 		//ImGui::Text("This is some useful text.");
 		ImGui::Checkbox("Wireframe Mode", &wireframeMode);
+		ImGui::SliderFloat("Scale", &scale, 0.1f, 2.0f);
 		ImGui::End();
 
 		ImGui::Render();
