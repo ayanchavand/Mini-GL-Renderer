@@ -5,6 +5,8 @@
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <stb/stb_image.h>
+
 
 #include "shader.h"
 #include "VAO.h"
@@ -12,23 +14,18 @@
 #include "EBO.h"
 
 GLfloat vertices[] = {
-	// Outer triangle (position + color)
-	 0.0f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,  // 0 top (red)
-	-0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  // 1 bottom-left (green)
-	 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  // 2 bottom-right (blue)
-
-	 // Midpoints (for the inner hole)
-	 -0.25f,  0.0f, 0.0f,  1.0f, 1.0f, 0.0f,  // 3 mid-left (yellow)
-	  0.25f,  0.0f, 0.0f,  1.0f, 0.0f, 1.0f,  // 4 mid-right (magenta)
-	  0.0f,  -0.5f, 0.0f,  0.0f, 1.0f, 1.0f   // 5 mid-bottom (cyan)
+	// Position         // Color
+	-0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // 0 top-left (red)
+	 0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // 1 top-right (green)
+	 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // 2 bottom-right (blue)
+	-0.5f, -0.5f, 0.0f,  1.0f, 1.0f, 0.0f   // 3 bottom-left (yellow)
 };
-
 
 GLuint indices[] = {
-	0, 3, 4,   // top small triangle
-	3, 1, 5,   // bottom-left small triangle
-	4, 5, 2    // bottom-right small triangle
+	0, 1, 2,   // first triangle (top-left, top-right, bottom-right)
+	0, 2, 3    // second triangle (top-left, bottom-right, bottom-left)
 };
+
 
 bool wireframeMode = true; // default is wireframe, can start false if you like
 float scale = 0.5f;
@@ -100,7 +97,7 @@ int main() {
 
 
 		VAO1.Bind();
-		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		ImGui::Begin("Render Settings");
 		//ImGui::Text("This is some useful text.");
