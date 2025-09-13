@@ -12,16 +12,17 @@
 #include "EBO.h"
 
 GLfloat vertices[] = {
-	// Outer triangle
-	 0.0f,  0.5f, 0.0f,  // 0 top
-	-0.5f, -0.5f, 0.0f,  // 1 bottom-left
-	 0.5f, -0.5f, 0.0f,  // 2 bottom-right
+	// Outer triangle (position + color)
+	 0.0f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,  // 0 top (red)
+	-0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,  // 1 bottom-left (green)
+	 0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,  // 2 bottom-right (blue)
 
 	 // Midpoints (for the inner hole)
-	 -0.25f,  0.0f, 0.0f, // 3 mid-left
-	  0.25f,  0.0f, 0.0f, // 4 mid-right
-	  0.0f,  -0.5f, 0.0f  // 5 mid-bottom
+	 -0.25f,  0.0f, 0.0f,  1.0f, 1.0f, 0.0f,  // 3 mid-left (yellow)
+	  0.25f,  0.0f, 0.0f,  1.0f, 0.0f, 1.0f,  // 4 mid-right (magenta)
+	  0.0f,  -0.5f, 0.0f,  0.0f, 1.0f, 1.0f   // 5 mid-bottom (cyan)
 };
+
 
 GLuint indices[] = {
 	0, 3, 4,   // top small triangle
@@ -64,10 +65,13 @@ int main() {
 	VBO VBO1(vertices, sizeof(vertices));
 	EBO EBO1(indices, sizeof(indices));
 
-	VAO1.LinkVBO(VBO1, 0);
+	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6* sizeof(float), (void*)0);
+	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	VAO1.Unbind();
 	VBO1.Unbind();
 	EBO1.Unbind();
+
+	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 	//Required Initialization for IMGUI BS
 	IMGUI_CHECKVERSION();
@@ -91,6 +95,10 @@ int main() {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		shaderProgram.Activate();
+
+		glUniform1f(uniID, 0.5f);
+
+
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
