@@ -120,22 +120,17 @@ int main() {
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		ImGui::Begin("Render Settings");
-		//ImGui::Text("This is some useful text.");
-		ImGui::Checkbox("Wireframe Mode", &wireframeMode);
-		ImGui::SliderFloat("Scale", &scale, 0.1f, 2.0f);
-		ImGui::End();
+		EngineGUI::ShowDebugWindow(wireframeMode, scale);
 
 		EngineGUI::EndFrame();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-
+	
 	//Cleanup
+	EngineGUI::ShutDown();
+
 	VAO1.Delete();
 	VBO1.Delete();
 	EBO1.Delete();

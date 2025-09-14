@@ -1,4 +1,5 @@
 #include "EngineGUI.h"
+#include "Camera.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -23,4 +24,19 @@ void EngineGUI::BeginFrame() {
 void EngineGUI::EndFrame() {
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void EngineGUI::ShutDown() {
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+
+}
+
+void EngineGUI::ShowDebugWindow(bool& wireframeMode, float& scale) {
+	ImGui::Begin("Render Settings");
+		//ImGui::Text("This is some useful text.");
+		ImGui::Checkbox("Wireframe Mode", &wireframeMode);
+		ImGui::SliderFloat("Scale", &scale, 0.1f, 2.0f);
+		ImGui::End();
 }
