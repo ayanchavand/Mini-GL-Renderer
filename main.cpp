@@ -9,6 +9,7 @@
 
 
 #include "shader.h"
+#include "EngineGUI.h"
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
@@ -99,20 +100,12 @@ int main() {
 	glUniform1i(texUni, 0);
 
 	//Required Initialization for IMGUI BS
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 330");
+	EngineGUI::Init(window);
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		EngineGUI::BeginFrame();
 
 		if (wireframeMode)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -133,11 +126,8 @@ int main() {
 		ImGui::SliderFloat("Scale", &scale, 0.1f, 2.0f);
 		ImGui::End();
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+		EngineGUI::EndFrame();
 		glfwSwapBuffers(window);
-		
 		glfwPollEvents();
 	}
 
