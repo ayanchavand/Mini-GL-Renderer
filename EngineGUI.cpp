@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <glm/gtc/type_ptr.hpp>
 
 // This function initializes the ImGui context and sets up the necessary bindings for GLFW and OpenGL3.
 // there's no logic here, just straight up initialization
@@ -33,10 +34,11 @@ void EngineGUI::ShutDown() {
 
 }
 
-void EngineGUI::ShowDebugWindow(bool& wireframeMode, float& scale) {
+void EngineGUI::ShowDebugWindow(bool& wireframeMode, float& scale, glm::vec3& backgroundColor) {
 	ImGui::Begin("Render Settings");
 		//ImGui::Text("This is some useful text.");
 		ImGui::Checkbox("Wireframe Mode", &wireframeMode);
 		ImGui::SliderFloat("Scale", &scale, 0.1f, 2.0f);
+		ImGui::ColorEdit3("Background Color", (float*)&backgroundColor);
 		ImGui::End();
 }

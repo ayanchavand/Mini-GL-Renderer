@@ -1,13 +1,11 @@
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-
+//Core Engine Modules ><
 #include "shader.h"
 #include "EngineGUI.h"
 #include "VAO.h"
@@ -30,6 +28,7 @@ GLuint indices[] = {
 
 bool wireframeMode = true; // default is wireframe, can start false if you like
 float scale = 0.5f;
+glm::vec3 backgroundColor = glm::vec3(0.2f, 0.3f, 0.3f);
 
 int main() {
 
@@ -39,8 +38,6 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	
 
 	// Create a windowed mode window and its OpenGL context
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Mini OGL renderer", NULL, NULL);
@@ -103,8 +100,23 @@ int main() {
 	EngineGUI::Init(window);
 
 	while (!glfwWindowShouldClose(window)) {
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0f); // alpha = 1.0
+
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+		GLint modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
+
+
+
+
+
 		EngineGUI::BeginFrame();
 
 		if (wireframeMode)
@@ -120,7 +132,7 @@ int main() {
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-		EngineGUI::ShowDebugWindow(wireframeMode, scale);
+		EngineGUI::ShowDebugWindow(wireframeMode, scale, backgroundColor);
 
 		EngineGUI::EndFrame();
 		glfwSwapBuffers(window);

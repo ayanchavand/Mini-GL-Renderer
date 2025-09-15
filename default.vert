@@ -8,6 +8,9 @@ out vec2 texCoord;      // pass texcoord to fragment shader
 
 uniform float scale;
 
+uniform float model;
+uniform float view;
+uniform float projection;
 void main()
 {
     gl_Position = vec4(aPos * scale, 1.0);
