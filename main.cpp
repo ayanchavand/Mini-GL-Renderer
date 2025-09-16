@@ -104,10 +104,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 		glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0f); // alpha = 1.0
-
 		glClear(GL_COLOR_BUFFER_BIT);
-
-	
 
 		EngineGUI::BeginFrame();
 
@@ -118,30 +115,30 @@ int main() {
 
 		shaderProgram.Activate();
 
-		// Get uniform locations
+		// Get vertex shader uniform locations in the GPU
 		GLuint modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
 		GLuint viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
 		GLuint projLoc = glGetUniformLocation(shaderProgram.ID, "projection");
 
-		// Example: identity model (or add transforms)
+		//model matrix : translate, rotate, scale
 		glm::mat4 model = glm::mat4(1.0f);
+		
+		//upload the model data to the modelLoc 1 4x4 matrix and don't transpose the matrix
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		// Use camera
+		// ask the camera for the view and projection matrices based on it's config
 		glm::mat4 view = camera.GetViewMatrix();
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
 		glm::mat4 projection = camera.GetProjectionMatrix();
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-
 		glUniform1f(scaleID, scale);
 		glBindTexture(GL_TEXTURE_2D, texture);
-
 		VAO1.Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		EngineGUI::ShowDebugWindow(wireframeMode, scale, backgroundColor);
+		EngineGUI::ShowCameraWindow(camera);
 
 		EngineGUI::EndFrame();
 		glfwSwapBuffers(window);

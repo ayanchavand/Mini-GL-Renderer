@@ -1,6 +1,7 @@
 #pragma once
 #include <GLFW/glfw3.h> 
 #include <glm/glm.hpp>
+#include "Camera.h"
 namespace EngineGUI {
 
 	void Init(GLFWwindow* window);
@@ -9,5 +10,6 @@ namespace EngineGUI {
 	void ShutDown();
 
 	void ShowDebugWindow(bool& wireframeMode, float& scale, glm::vec3& backgroundColor);
+	void ShowCameraWindow(Camera& camera);
 	//void Render();
 }

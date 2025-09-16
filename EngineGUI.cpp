@@ -34,6 +34,8 @@ void EngineGUI::ShutDown() {
 
 }
 
+//Actual GUI Code
+
 void EngineGUI::ShowDebugWindow(bool& wireframeMode, float& scale, glm::vec3& backgroundColor) {
 	ImGui::Begin("Render Settings");
 		//ImGui::Text("This is some useful text.");
@@ -41,4 +43,21 @@ void EngineGUI::ShowDebugWindow(bool& wireframeMode, float& scale, glm::vec3& ba
 		ImGui::SliderFloat("Scale", &scale, 0.1f, 2.0f);
 		ImGui::ColorEdit3("Background Color", (float*)&backgroundColor);
 		ImGui::End();
+}
+
+void EngineGUI::ShowCameraWindow(Camera& camera) {
+	ImGui::Begin("Camera Settings");
+
+	// Editable vectors
+	ImGui::InputFloat3("Position", &camera.Position.x);
+	ImGui::InputFloat3("Front", &camera.Front.x);
+	ImGui::InputFloat3("Up", &camera.Up.x);
+
+	// Editable scalar values
+	ImGui::SliderFloat("FOV", &camera.Fov, 1.0f, 90.0f);
+	ImGui::SliderFloat("Aspect Ratio", &camera.AspectRatio, 0.1f, 4.0f);
+	ImGui::SliderFloat("Near Plane", &camera.NearPlane, 0.01f, 10.0f);
+	ImGui::SliderFloat("Far Plane", &camera.FarPlane, 10.0f, 1000.0f);
+
+	ImGui::End();
 }
