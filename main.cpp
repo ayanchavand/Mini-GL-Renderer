@@ -4,10 +4,11 @@
 #include <stb/stb_image.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <glm/gtc/type_ptr.hpp>
 //Core Engine Modules ><
 #include "shader.h"
 #include "EngineGUI.h"
+#include "Camera.h"
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
@@ -31,13 +32,15 @@ float scale = 0.5f;
 glm::vec3 backgroundColor = glm::vec3(0.2f, 0.3f, 0.3f);
 
 int main() {
-
+	//I love init
 	// Initialize GLFWc
 	glfwInit();
 	// Set GLFW to use OpenGL version 3.3 and the core profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	Camera camera(glm::vec3(1.0f, 0.0f, 3.0f), 800.0f / 600.0f);
 
 	// Create a windowed mode window and its OpenGL context
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Mini OGL renderer", NULL, NULL);
@@ -104,18 +107,7 @@ int main() {
 
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-		GLint modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
-
-
-
-
+	
 
 		EngineGUI::BeginFrame();
 
@@ -125,6 +117,23 @@ int main() {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		shaderProgram.Activate();
+
+		// Get uniform locations
+		GLuint modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
+		GLuint viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
+		GLuint projLoc = glGetUniformLocation(shaderProgram.ID, "projection");
+
+		// Example: identity model (or add transforms)
+		glm::mat4 model = glm::mat4(1.0f);
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		// Use camera
+		glm::mat4 view = camera.GetViewMatrix();
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+		glm::mat4 projection = camera.GetProjectionMatrix();
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
 
 		glUniform1f(scaleID, scale);
 		glBindTexture(GL_TEXTURE_2D, texture);
