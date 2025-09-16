@@ -8,12 +8,15 @@ out vec2 texCoord;      // pass texcoord to fragment shader
 
 uniform float scale;
 
-uniform float model;
-uniform float view;
-uniform float projection;
+//MVP matricies
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
 void main()
-{
-    gl_Position = vec4(aPos * scale, 1.0);
+{   
+    // Since this is matrix multiplication the order matters
+    gl_Position = projection * view * model * vec4(aPos * scale, 1.0);
     vertexColor = aColor;
     texCoord = aTexCoord;
 }
