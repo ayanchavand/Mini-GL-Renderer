@@ -137,6 +137,9 @@
     <ClInclude Include="EngineGUI.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\Downloads\twitter-card.jpg">

@@ -26,6 +26,27 @@ GLuint indices[] = {
 	0, 2, 3    // second triangle
 };
 
+GLfloat cubeVertices[] = {
+	// Positions         // Colors
+	-0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, // 0
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, // 1
+	 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, // 2
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, // 3
+	-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, // 4
+	 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // 5
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, // 6
+	-0.5f,  0.5f,  0.5f,  0.3f, 0.7f, 0.5f  // 7
+};
+
+GLuint cubeIndices[] = {
+	0,1,2, 2,3,0, // back face
+	4,5,6, 6,7,4, // front face
+	4,5,1, 1,0,4, // bottom face
+	7,6,2, 2,3,7, // top face
+	4,0,3, 3,7,4, // left face
+	5,1,2, 2,6,5  // right face
+};
+
 
 bool wireframeMode = true; // default is wireframe, can start false if you like
 float scale = 0.5f;
@@ -33,7 +54,7 @@ glm::vec3 backgroundColor = glm::vec3(0.2f, 0.3f, 0.3f);
 
 int main() {
 	//I love init
-	// Initialize GLFWc
+	// Initialize GLFW
 	glfwInit();
 	// Set GLFW to use OpenGL version 3.3 and the core profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -57,6 +78,7 @@ int main() {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	Shader shaderProgram("default.vert", "default.frag");
 	
+	/*
 	VAO VAO1;
 	VAO1.Bind();
 
@@ -69,6 +91,20 @@ int main() {
 	VAO1.Unbind();
 	VBO1.Unbind();
 	EBO1.Unbind();
+	*/
+
+	VAO cubeVAO;
+	cubeVAO.Bind();
+
+	VBO cubeVBO(cubeVertices, sizeof(cubeVertices));
+	EBO cubeEBO(cubeIndices, sizeof(cubeIndices));
+
+	cubeVAO.LinkAttrib(cubeVBO, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0); // position
+	cubeVAO.LinkAttrib(cubeVBO, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float))); // color
+
+	cubeVAO.Unbind();
+	cubeVBO.Unbind();
+	cubeEBO.Unbind();
 
 	GLuint scaleID = glGetUniformLocation(shaderProgram.ID, "scale");
 
@@ -86,7 +122,6 @@ int main() {
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glGenerateMipmap(GL_TEXTURE_2D);
@@ -134,8 +169,9 @@ int main() {
 
 		glUniform1f(scaleID, scale);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		VAO1.Bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		cubeVAO.Bind();
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
 
 		EngineGUI::ShowDebugWindow(wireframeMode, scale, backgroundColor);
 		EngineGUI::ShowCameraWindow(camera);
@@ -149,9 +185,10 @@ int main() {
 	//Cleanup
 	EngineGUI::ShutDown();
 
-	VAO1.Delete();
-	VBO1.Delete();
-	EBO1.Delete();
+	// Cleanup cube resources
+	cubeVAO.Delete();
+	cubeVBO.Delete();
+	cubeEBO.Delete();
 	glDeleteTextures(1, &texture);
 	shaderProgram.Delete();
 
