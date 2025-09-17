@@ -1,22 +1,21 @@
 #version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aColor;
-layout (location = 2) in vec2 aTexCoord;
+layout (location = 0) in vec3 aPos;    // vertex position
+layout (location = 1) in vec3 aColor;  // vertex color
 
 out vec3 vertexColor;   // pass color to fragment shader
-out vec2 texCoord;      // pass texcoord to fragment shader
 
 uniform float scale;
 
-//MVP matricies
+// MVP matrices
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
 void main()
 {   
-    // Since this is matrix multiplication the order matters
+    // Transform vertex position
     gl_Position = projection * view * model * vec4(aPos * scale, 1.0);
+
+    // Pass color to fragment shader
     vertexColor = aColor;
-    texCoord = aTexCoord;
 }

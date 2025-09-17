@@ -12,6 +12,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
+#include "Renderer.h"
 
 GLfloat vertices[] = {
 	// Position        // Color           // TexCoord
@@ -27,16 +28,18 @@ GLuint indices[] = {
 };
 
 GLfloat cubeVertices[] = {
-	// Positions         // Colors
-	-0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f, // 0
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, // 1
-	 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, // 2
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, // 3
-	-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, // 4
-	 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 1.0f, // 5
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f, // 6
-	-0.5f,  0.5f,  0.5f,  0.3f, 0.7f, 0.5f  // 7
+	// Positions         // Colors           // TexCoords
+	-0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  // 0
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // 1
+	 0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,   // 2
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,   // 3
+
+	-0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f,   // 4
+	 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 1.0f,   // 5
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 1.0f,   // 6
+	-0.5f,  0.5f,  0.5f,  0.3f, 0.7f, 0.5f,   // 7
 };
+
 
 GLuint cubeIndices[] = {
 	0,1,2, 2,3,0, // back face
@@ -53,7 +56,7 @@ float scale = 0.5f;
 glm::vec3 backgroundColor = glm::vec3(0.2f, 0.3f, 0.3f);
 
 int main() {
-	//I love init
+	//I love BOILERPLATECODE :D
 	// Initialize GLFW
 	glfwInit();
 	// Set GLFW to use OpenGL version 3.3 and the core profile
@@ -61,7 +64,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	Camera camera(glm::vec3(1.0f, 0.0f, 3.0f), 800.0f / 600.0f);
+	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), 800.0f / 600.0f);
 
 	// Create a windowed mode window and its OpenGL context
 	GLFWwindow* window = glfwCreateWindow(800, 600, "Mini OGL renderer", NULL, NULL);
@@ -73,9 +76,11 @@ int main() {
 	glfwMakeContextCurrent(window);
 
 	// Load OpenGL function pointers using GLAD
-	gladLoadGL();
-	glViewport(0, 0, 800, 600);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	Renderer renderer(800, 600);
+	renderer.Init();
+
+	
+
 	Shader shaderProgram("default.vert", "default.frag");
 	
 	/*
@@ -108,6 +113,7 @@ int main() {
 
 	GLuint scaleID = glGetUniformLocation(shaderProgram.ID, "scale");
 
+	/* 
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true); // Flip the image vertically on load
 	unsigned char* data = stbi_load("twitter-card.jpg", &width, &height, &nrChannels, 0);
@@ -133,20 +139,18 @@ int main() {
 	GLuint texUni = glGetUniformLocation(shaderProgram.ID, "ourTexture");
 	shaderProgram.Activate();
 	glUniform1i(texUni, 0);
+	*/
 
 	//Required Initialization for IMGUI BS
 	EngineGUI::Init(window);
 
+	glEnable(GL_DEPTH_TEST);
+
 	while (!glfwWindowShouldClose(window)) {
-		glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0f); // alpha = 1.0
-		glClear(GL_COLOR_BUFFER_BIT);
-
+		
+		// Start the GUI frame
 		EngineGUI::BeginFrame();
-
-		if (wireframeMode)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		else
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		renderer.BeginFrame(backgroundColor);
 
 		shaderProgram.Activate();
 
@@ -157,6 +161,7 @@ int main() {
 
 		//model matrix : translate, rotate, scale
 		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		
 		//upload the model data to the modelLoc 1 4x4 matrix and don't transpose the matrix
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -167,29 +172,29 @@ int main() {
 		glm::mat4 projection = camera.GetProjectionMatrix();
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
+		//TODO: Remove scale in favour of model matrix scaling
 		glUniform1f(scaleID, scale);
-		glBindTexture(GL_TEXTURE_2D, texture);
+
+		//glBindTexture(GL_TEXTURE_2D, texture);
 		cubeVAO.Bind();
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-
+		//Draw our kawaii UI
 		EngineGUI::ShowDebugWindow(wireframeMode, scale, backgroundColor);
 		EngineGUI::ShowCameraWindow(camera);
 
+		//End the GUI frame
 		EngineGUI::EndFrame();
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		renderer.EndFrame(window);
 	}
 
 	
-	//Cleanup
+	//Exit Cleanup
 	EngineGUI::ShutDown();
-
-	// Cleanup cube resources
 	cubeVAO.Delete();
 	cubeVBO.Delete();
 	cubeEBO.Delete();
-	glDeleteTextures(1, &texture);
+	//glDeleteTextures(1, &texture);
 	shaderProgram.Delete();
 
 	glfwDestroyWindow(window);
