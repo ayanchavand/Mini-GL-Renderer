@@ -78,25 +78,9 @@ int main() {
 	// Load OpenGL function pointers using GLAD
 	Renderer renderer(800, 600);
 	renderer.Init();
-
 	
-
+	// Build and compile our shader program
 	Shader shaderProgram("default.vert", "default.frag");
-	
-	/*
-	VAO VAO1;
-	VAO1.Bind();
-
-	VBO VBO1(vertices, sizeof(vertices));
-	EBO EBO1(indices, sizeof(indices));
-
-	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	VAO1.Unbind();
-	VBO1.Unbind();
-	EBO1.Unbind();
-	*/
 
 	VAO cubeVAO;
 	cubeVAO.Bind();
@@ -113,33 +97,6 @@ int main() {
 
 	GLuint scaleID = glGetUniformLocation(shaderProgram.ID, "scale");
 
-	/* 
-	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true); // Flip the image vertically on load
-	unsigned char* data = stbi_load("twitter-card.jpg", &width, &height, &nrChannels, 0);
-
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-
-	stbi_image_free(data);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	GLuint texUni = glGetUniformLocation(shaderProgram.ID, "ourTexture");
-	shaderProgram.Activate();
-	glUniform1i(texUni, 0);
-	*/
 
 	//Required Initialization for IMGUI BS
 	EngineGUI::Init(window);
@@ -152,33 +109,24 @@ int main() {
 		EngineGUI::BeginFrame();
 		renderer.BeginFrame(backgroundColor);
 
-		shaderProgram.Activate();
-
-		// Get vertex shader uniform locations in the GPU
-		GLuint modelLoc = glGetUniformLocation(shaderProgram.ID, "model");
-		GLuint viewLoc = glGetUniformLocation(shaderProgram.ID, "view");
-		GLuint projLoc = glGetUniformLocation(shaderProgram.ID, "projection");
-
 		//model matrix : translate, rotate, scale
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		renderer.Render(cubeVAO, shaderProgram, model, camera);
+
+		// Second cube
+		glm::mat4 model2 = glm::mat4(1.0f);
+		model2 = glm::translate(model2, glm::vec3(1.0f, 0.0f, 0.0f));
+		model2 = glm::rotate(model2, (float)glfwGetTime(), glm::vec3(1.0f, 0.3f, 0.5f));
+		renderer.Render(cubeVAO, shaderProgram, model2, camera);
+
+		glm::mat4 model3 = glm::mat4(1.0f);
+		model3 = glm::translate(model3, glm::vec3(-1.0f, 0.0f, 0.0f));
+		model3 = glm::rotate(model3, (float)glfwGetTime(), glm::vec3(.2f, 0.7f, 1.0f));
+		renderer.Render(cubeVAO, shaderProgram, model3, camera);
 		
-		//upload the model data to the modelLoc 1 4x4 matrix and don't transpose the matrix
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		// ask the camera for the view and projection matrices based on it's config
-		glm::mat4 view = camera.GetViewMatrix();
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glm::mat4 projection = camera.GetProjectionMatrix();
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
 		//TODO: Remove scale in favour of model matrix scaling
 		glUniform1f(scaleID, scale);
-
-		//glBindTexture(GL_TEXTURE_2D, texture);
-		cubeVAO.Bind();
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
 		//Draw our kawaii UI
 		EngineGUI::ShowDebugWindow(wireframeMode, scale, backgroundColor);
 		EngineGUI::ShowCameraWindow(camera);
