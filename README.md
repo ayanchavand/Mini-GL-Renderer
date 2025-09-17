@@ -2,19 +2,23 @@
 
 A lightweight OpenGL renderer project built with C++14, designed for educational purposes and rapid prototyping. The project demonstrates modern OpenGL techniques, including shader management, vertex buffer objects (VBO), vertex array objects (VAO), and integration with popular libraries such as GLFW and Dear ImGui.
 
+![Renderer Demo](media/demo.gif)
+
 ## Features
 
 - Modern OpenGL (3.3+) rendering pipeline
 - Custom shader loading and compilation (`Shader.cpp`, `shader.h`)
-- Vertex Buffer Object (VBO) and Vertex Array Object (VAO) abstraction
+- Vertex Buffer Object (VBO), Vertex Array Object (VAO), and Element Buffer Object (EBO) abstraction
 - Window and input management via [GLFW](https://www.glfw.org/)
 - Immediate-mode GUI integration using [Dear ImGui](https://github.com/ocornut/imgui)
 - Example vertex (`default.vert`) and fragment (`default.frag`) shaders
-- Camera system with configurable position and projection
+- Camera system with configurable position and projection (`Camera.cpp`, `Camera.h`)
 - Wireframe and fill rendering modes toggle
 - Texture loading via stb_image
-- Real-time debug and camera info windows using ImGui
+- Real-time debug and camera info windows using ImGui (`EngineGUI.cpp`, `EngineGUI.h`)
 - Clean, modular C++ codebase
+- Renderer class for frame management and mesh drawing (`Renderer.cpp`, `Renderer.h`)
+- Easily extensible for new mesh types and rendering features
 
 ## Getting Started
 
@@ -49,6 +53,7 @@ A lightweight OpenGL renderer project built with C++14, designed for educational
 - `EBO.cpp`, `EBO.h` – Element Buffer Object abstraction
 - `Camera.cpp`, `Camera.h` – Camera system for view/projection matrices
 - `EngineGUI.cpp`, `EngineGUI.h` – ImGui-based debug and camera windows
+- `Renderer.cpp`, `Renderer.h` – Renderer class for frame and mesh management
 - `default.vert`, `default.frag` – Example GLSL shader files
 - `imgui/` – Dear ImGui source and configuration
 - `Libraries/include/GLFW/` – GLFW headers
