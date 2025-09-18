@@ -61,3 +61,11 @@ void EngineGUI::ShowCameraWindow(Camera& camera) {
 
 	ImGui::End();
 }
+
+void EngineGUI::ShowStatsWindow(float fps, float msPerFrame) {
+	ImGui::SetNextWindowPos(ImVec2(10, 10));
+	ImGui::Begin("Performance Stats", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	ImGui::Text("FPS: %.1f", fps);
+	ImGui::Text("Frame Time: %.3f ms", msPerFrame);
+	ImGui::End();
+}

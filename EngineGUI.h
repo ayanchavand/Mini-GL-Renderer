@@ -11,5 +11,6 @@ namespace EngineGUI {
 
 	void ShowDebugWindow(bool& wireframeMode, float& scale, glm::vec3& backgroundColor);
 	void ShowCameraWindow(Camera& camera);
+	void ShowStatsWindow(float fps, float msPerFrame);
 	//void Render();
 }

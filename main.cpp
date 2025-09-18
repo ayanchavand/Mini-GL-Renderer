@@ -103,12 +103,25 @@ int main() {
 
 	glEnable(GL_DEPTH_TEST);
 
+
+	float deltaTime = 0.0f;	// Time between current frame and last frame
+	float lastFrame = 0.0f;
+
 	while (!glfwWindowShouldClose(window)) {
-		
+		//Frame rate calculation
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		float fps = 1.0f / deltaTime;
+		float msPerFrame = deltaTime * 1000.0f;
+
+
 		// Start the GUI frame
 		EngineGUI::BeginFrame();
 		renderer.BeginFrame(backgroundColor);
 
+		EngineGUI::ShowStatsWindow(fps, msPerFrame);
 		//model matrix : translate, rotate, scale
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
