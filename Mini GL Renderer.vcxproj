@@ -156,6 +156,7 @@
   <ItemGroup>
     <None Include="default.frag" />
     <None Include="default.vert" />
+    <None Include="light.frag" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>

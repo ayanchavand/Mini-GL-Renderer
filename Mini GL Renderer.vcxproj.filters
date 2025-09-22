@@ -81,6 +81,9 @@
     <ClCompile Include="EngineGUI.cpp">
       <Filter>Source Files\core</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="default.vert">
@@ -90,6 +93,9 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="README.md" />
+    <None Include="light.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EBO.h">
@@ -139,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
