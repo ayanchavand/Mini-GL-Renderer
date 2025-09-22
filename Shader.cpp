@@ -55,6 +55,10 @@ void Shader::Delete() {
 	glDeleteProgram(ID);
 }
 
+void Shader::SetVec3(const std::string& name, const glm::vec3& value) {
+	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+
 void Shader::compileErrors(unsigned int shader, const char* type) {
 	GLint hasCompiled;
 	char infoLog[1024];
