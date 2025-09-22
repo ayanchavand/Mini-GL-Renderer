@@ -81,6 +81,7 @@ int main() {
 	
 	// Build and compile our shader program
 	Shader shaderProgram("default.vert", "default.frag");
+	Shader lightShader("default.vert", "light.frag");
 
 	VAO cubeVAO;
 	cubeVAO.Bind();
@@ -122,6 +123,7 @@ int main() {
 		renderer.BeginFrame(backgroundColor);
 
 		EngineGUI::ShowStatsWindow(fps, msPerFrame);
+
 		//model matrix : translate, rotate, scale
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
@@ -137,9 +139,14 @@ int main() {
 		model3 = glm::translate(model3, glm::vec3(-1.0f, 0.0f, 0.0f));
 		model3 = glm::rotate(model3, (float)glfwGetTime(), glm::vec3(.2f, 0.7f, 1.0f));
 		renderer.Render(cubeVAO, shaderProgram, model3, camera);
-		
+
+		glm::mat4 lightModel = glm::mat4(1.0f);
+		lightModel = glm::translate(lightModel, glm::vec3(0.0f, 1.0f, 0.0f));
+		lightModel = glm::rotate(lightModel, (float)glfwGetTime(), glm::vec3(.4f, .6f, 1.0f));
+		renderer.Render(cubeVAO, lightShader, lightModel, camera);
+
 		//TODO: Remove scale in favour of model matrix scaling
-		glUniform1f(scaleID, scale);
+		//glUniform1f(scaleID, scale);
 		//Draw our kawaii UI
 		EngineGUI::ShowDebugWindow(wireframeMode, scale, backgroundColor);
 		EngineGUI::ShowCameraWindow(camera);
