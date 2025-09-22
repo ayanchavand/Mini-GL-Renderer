@@ -83,6 +83,7 @@ int main() {
 	Shader shaderProgram("default.vert", "default.frag");
 	Shader lightShader("default.vert", "light.frag");
 
+	shaderProgram.SetVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	VAO cubeVAO;
 	cubeVAO.Bind();
 

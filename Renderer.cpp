@@ -26,7 +26,7 @@ void Renderer::BeginFrame(const glm::vec3& bg) {
 
 void Renderer::Render(VAO& vao, Shader& shader, const glm::mat4& model, Camera& camera) {
 	shader.Activate();
-
+	shader.SetVec3("lightColor", glm::vec3(.2f, 1.0f, 1.0f));
 	// Get vertex shader uniform locations in the GPU
 	GLuint modelLoc = glGetUniformLocation(shader.ID, "model");
 	GLuint viewLoc = glGetUniformLocation(shader.ID, "view");

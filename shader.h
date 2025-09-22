@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iostream>
 #include <cerrno>
+#include <glm/glm.hpp>
 
 std::string get_file_contents(const char* filename);
 
@@ -17,6 +18,7 @@ public:
 
 	void Activate();
 	void Delete();
+	void SetVec3(const std::string& name, const glm::vec3& value);
 private:
 	void compileErrors(unsigned int shader, const char* type);
 };
