@@ -21,6 +21,11 @@ void main()
     // Pass color to fragment shader
     vertexColor = aColor;
 
+    //TODO: Understand what these two lines do that make the lighting work correctly with rotation and scaling
+    mat3 normalMatrix = transpose(inverse(mat3(model)));
+    vec3 normal = normalize(normalMatrix * aNormal);
+
+
     // Pass normal to fragment shader
-    Normal = aNormal;
+    Normal = normal;
 }
