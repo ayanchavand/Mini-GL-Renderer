@@ -102,6 +102,9 @@
     <None Include="default.vert">
       <Filter>Resource Files\Shaders\Vert</Filter>
     </None>
+    <None Include="light.vert">
+      <Filter>Resource Files\Shaders\Vert</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EBO.h">
