@@ -158,20 +158,21 @@ int main() {
 
 		//model matrix : translate, rotate, scale
 		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 		model = glm::scale(model, defaultScale);
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		renderer.Render(cubeVAO, shaderProgram, model, camera);
 
 		// Second cube
 		glm::mat4 model2 = glm::mat4(1.0f);
-		model2 = glm::translate(model2, glm::vec3(2.0f, 0.0f, 0.0f));
+		model2 = glm::translate(model2, glm::vec3(1.5f, 0.0f, 0.0f));
 		model2 = glm::scale(model2, defaultScale);
 		model2 = glm::rotate(model2, (float)glfwGetTime(), glm::vec3(1.0f, 0.3f, 0.5f));
 		renderer.Render(cubeVAO, shaderProgram, model2, camera);
 
 		glm::mat4 model3 = glm::mat4(1.0f);
+		model3 = glm::translate(model3, glm::vec3(-1.5f, 0.0f, 0.0f));
 		model3 = glm::scale(model3, defaultScale);
-		model3 = glm::translate(model3, glm::vec3(-1.0f, 0.0f, 0.0f));
 		model3 = glm::rotate(model3, (float)glfwGetTime(), glm::vec3(.2f, 0.7f, 1.0f));
 		renderer.Render(cubeVAO, shaderProgram, model3, camera);
 
