@@ -9,7 +9,7 @@ namespace EngineGUI {
 	void EndFrame();
 	void ShutDown();
 
-	void ShowDebugWindow(bool& wireframeMode, float& scale, glm::vec3& backgroundColor);
+	void ShowDebugWindow(glm::vec3& backgroundColor);
 	void ShowCameraWindow(Camera& camera);
 	void ShowStatsWindow(float fps, float msPerFrame);
 	//void Render();

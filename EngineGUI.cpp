@@ -36,11 +36,8 @@ void EngineGUI::ShutDown() {
 
 //Actual GUI Code
 
-void EngineGUI::ShowDebugWindow(bool& wireframeMode, float& scale, glm::vec3& backgroundColor) {
+void EngineGUI::ShowDebugWindow(glm::vec3& backgroundColor) {
 	ImGui::Begin("Render Settings");
-		//ImGui::Text("This is some useful text.");
-		ImGui::Checkbox("Wireframe Mode", &wireframeMode);
-		ImGui::SliderFloat("Scale", &scale, 0.1f, 2.0f);
 		ImGui::ColorEdit3("Background Color", (float*)&backgroundColor);
 		ImGui::End();
 }

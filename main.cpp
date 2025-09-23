@@ -185,7 +185,7 @@ int main() {
 		//TODO: Remove scale in favour of model matrix scaling
 		//glUniform1f(scaleID, scale);
 		//Draw our kawaii UI
-		EngineGUI::ShowDebugWindow(wireframeMode, scale, backgroundColor);
+		EngineGUI::ShowDebugWindow(backgroundColor);
 		EngineGUI::ShowCameraWindow(camera);
 
 		//End the GUI frame
