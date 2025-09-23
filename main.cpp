@@ -178,7 +178,7 @@ int main() {
 
 		glm::mat4 lightModel = glm::mat4(1.0f);
 		lightModel = glm::scale(lightModel, defaultScale);
-		lightModel = glm::translate(lightModel, glm::vec3(0.0f, 1.0f, 0.0f));
+		lightModel = glm::translate(lightModel, glm::vec3(0.0f, 2.0f, 0.0f));
 		//lightModel = glm::rotate(lightModel, (float)glfwGetTime(), glm::vec3(.4f, .6f, 1.0f));
 		renderer.Render(cubeVAO, lightShader, lightModel, camera);
 
