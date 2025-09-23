@@ -49,9 +49,9 @@ void EngineGUI::ShowCameraWindow(Camera& camera) {
 	ImGui::Begin("Camera Settings");
 
 	// Editable vectors
-	ImGui::InputFloat3("Position", &camera.Position.x);
-	ImGui::InputFloat3("Front", &camera.Front.x);
-	ImGui::InputFloat3("Up", &camera.Up.x);
+	ImGui::DragFloat3("Position", &camera.Position.x, 0.1f);
+	ImGui::DragFloat3("Front", &camera.Front.x, 0.1f);
+	ImGui::DragFloat3("Up", &camera.Up.x, 0.1f);
 
 	// Editable scalar values
 	ImGui::SliderFloat("FOV", &camera.Fov, 1.0f, 90.0f);
