@@ -21,8 +21,15 @@ void main()
     float diff = max(dot(norm, lightDir), 0.0);     // cosine of angle between normal and light
     vec3 diffuse = diff * lightColor;
 
+    // --- Specular ---
+    float specularStrength = 0.5;
+    vec3 viewDir = normalize(viewPos - FragPos);    // direction from fragment to viewer
+    vec3 reflectDir = reflect(-lightDir, norm);     // direction of reflected light
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 256); // shininess factor
+    vec3 specular = specularStrength * spec * lightColor;
+
     // --- Combine ---
-    vec3 result = (ambient + diffuse) * vertexColor; 
+    vec3 result = (ambient + diffuse + specular) * vertexColor; 
 
     FragColor = vec4(result, 1.0);
 }
